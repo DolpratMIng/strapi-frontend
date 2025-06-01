@@ -13,7 +13,9 @@ const fetchBlog = async (documentId) => {
 };
 
 export default async function Page({ params }) {
-  const blog = await fetchBlog(params.documentId);
+  const { documentId: slug } = await params;
+
+  const blog = await fetchBlog(slug);
   if (!blog) {
     return <div>Blog not found.</div>;
   }
@@ -22,11 +24,12 @@ export default async function Page({ params }) {
       Blog ID: {blog.id}
       <img
         width="100px"
-        src={`${process.env.STRAPI_BASE_URL}${blog.thumbnail.url}`}
+        // src={`${process.env.STRAPI_BASE_URL}${blog?.thumbnail.url}`}
+        src={`${blog?.thumbnail.url}`}
         alt={blog.title}
       />
       <div>{blog.title}</div>
-      <div>author by: {blog.author.name ?? "Unknown"}</div>
+      <div>author by: {blog.author?.name ?? "Unknown"}</div>
     </div>
   );
 }
